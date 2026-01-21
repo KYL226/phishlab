@@ -18,9 +18,9 @@ export default function Navbar() {
                 viewport={{ once: true }}
                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
             >
-                <a href="https://prebuiltui.com?utm_source=pixels">
-                    <Image className="h-8.5 w-auto" src="/assets/logo.svg" alt="logo" width={130} height={34} priority />
-                </a>
+                <Link href="/">
+                    <Image className="h-8.5 w-auto" src="/assets/logo.svg" alt="PhishLab logo" width={130} height={34} priority />
+                </Link>
 
                 <div className="hidden md:flex items-center gap-8 transition duration-500">
                     {navlinks.map((link: INavLink) => (
@@ -30,9 +30,9 @@ export default function Navbar() {
                     ))}
                 </div>
 
-                <button className="hidden md:block px-6 py-2.5 bg-pink-600 hover:bg-pink-700 active:scale-95 transition-all rounded-full">
-                    Start free trial
-                </button>
+                <Link href="/auth/signin" className="hidden md:block px-6 py-2.5 bg-pink-600 hover:bg-pink-700 active:scale-95 transition-all rounded-full">
+                    Se connecter
+                </Link>
                 <button onClick={() => setIsOpen(true)} className="md:hidden">
                     <MenuIcon size={26} className="active:scale-90 transition" />
                 </button>

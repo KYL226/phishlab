@@ -41,11 +41,11 @@ export default function NewCampaignPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Nouvelle campagne</h1>
+      <h1 className="text-3xl font-bold text-white mb-8">Nouvelle campagne</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-slate-950 border border-slate-800 rounded-lg shadow p-6 space-y-6">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
             Nom de la campagne *
           </label>
           <input
@@ -54,13 +54,13 @@ export default function NewCampaignPage() {
             required
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             placeholder="Ex: Test de phishing - Banque"
           />
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="description" className="block text-sm font-medium text-slate-300 mb-2">
             Description
           </label>
           <textarea
@@ -68,13 +68,13 @@ export default function NewCampaignPage() {
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             placeholder="Description de la campagne..."
           />
         </div>
 
         <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="subject" className="block text-sm font-medium text-slate-300 mb-2">
             Sujet de l'email *
           </label>
           <input
@@ -83,13 +83,13 @@ export default function NewCampaignPage() {
             required
             value={formData.subject}
             onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             placeholder="Ex: Action requise : Vérifiez votre compte"
           />
         </div>
 
         <div>
-          <label htmlFor="emailContent" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="emailContent" className="block text-sm font-medium text-slate-300 mb-2">
             Contenu de l'email (HTML) *
           </label>
           <textarea
@@ -98,13 +98,13 @@ export default function NewCampaignPage() {
             value={formData.emailContent}
             onChange={(e) => setFormData({ ...formData, emailContent: e.target.value })}
             rows={10}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition font-mono text-sm"
             placeholder="<html>...</html>"
           />
         </div>
 
         <div>
-          <label htmlFor="landingPageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="landingPageUrl" className="block text-sm font-medium text-slate-300 mb-2">
             URL de la landing page simulée *
           </label>
           <input
@@ -113,13 +113,13 @@ export default function NewCampaignPage() {
             required
             value={formData.landingPageUrl}
             onChange={(e) => setFormData({ ...formData, landingPageUrl: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             placeholder="https://example.com/login"
           />
         </div>
 
         <div>
-          <label htmlFor="educationalContent" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="educationalContent" className="block text-sm font-medium text-slate-300 mb-2">
             Contenu éducatif (affiché après interaction) *
           </label>
           <textarea
@@ -128,7 +128,7 @@ export default function NewCampaignPage() {
             value={formData.educationalContent}
             onChange={(e) => setFormData({ ...formData, educationalContent: e.target.value })}
             rows={8}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
             placeholder="Contenu éducatif expliquant pourquoi c'était un email de phishing..."
           />
         </div>
@@ -137,14 +137,14 @@ export default function NewCampaignPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            className="px-6 py-2 border border-slate-700 rounded-lg text-slate-300 hover:bg-slate-800 transition"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-pink-600 text-white rounded-lg font-semibold hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             {loading ? 'Création...' : 'Créer la campagne'}
           </button>

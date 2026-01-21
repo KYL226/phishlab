@@ -6,16 +6,17 @@ import { generateToken } from '@/lib/utils';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth('ADMIN');
     const body = await request.json();
     const { targets } = body; // Array of { email, name? }
+    const { id } = await params;
 
     const campaign = await prisma.campaign.findFirst({
       where: {
-        id: params.id,
+        id,
         createdBy: user.id,
       },
     });
@@ -46,12 +47,14 @@ export async function POST(
     const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
     const sendResults = await Promise.allSettled(
       campaignTargets.map(async (target) => {
-        const trackingUrl = `${baseUrl}/track/click/${target.token}`;
+        const clickTrackingUrl = `${baseUrl}/api/track/click/${target.token}`;
+        const openTrackingUrl = `${baseUrl}/api/track/open/${target.token}`;
         const success = await sendPhishingEmail(
           target.email,
           campaign.subject,
           campaign.emailContent,
-          trackingUrl
+          clickTrackingUrl,
+          openTrackingUrl
         );
         if (success) {
           await prisma.campaignTarget.update({

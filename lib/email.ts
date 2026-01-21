@@ -14,15 +14,35 @@ export async function sendPhishingEmail(
   to: string,
   subject: string,
   htmlContent: string,
-  trackingUrl: string
+  clickTrackingUrl: string,
+  openTrackingUrl: string
 ) {
   // Remplacez les liens dans le contenu par des liens de tracking
-  const trackedContent = htmlContent.replace(
+  let trackedContent = htmlContent.replace(
     /href="([^"]+)"/g,
     (match, url) => {
-      return `href="${trackingUrl}?redirect=${encodeURIComponent(url)}"`;
+      return `href="${clickTrackingUrl}?redirect=${encodeURIComponent(url)}"`;
     }
   );
+
+  // Ajouter un pixel de tracking invisible pour l'ouverture de l'email
+  // Utiliser plusieurs formats pour maximiser la compatibilité
+  const trackingPixel = `<img src="${openTrackingUrl}" width="1" height="1" style="display:none !important;width:1px !important;height:1px !important;border:0 !important;position:absolute !important;opacity:0 !important;pointer-events:none !important;" alt="" border="0" />`;
+  
+  // Essayer d'insérer dans le body, sinon dans html, sinon à la fin
+  if (trackedContent.includes('</body>')) {
+    // Insérer avant la balise fermante </body>
+    trackedContent = trackedContent.replace('</body>', `${trackingPixel}</body>`);
+  } else if (trackedContent.includes('</html>')) {
+    // Insérer avant la balise fermante </html>
+    trackedContent = trackedContent.replace('</html>', `${trackingPixel}</html>`);
+  } else if (trackedContent.includes('<body')) {
+    // Si body existe mais pas de balise fermante, ajouter juste après <body>
+    trackedContent = trackedContent.replace(/<body([^>]*)>/i, `$&${trackingPixel}`);
+  } else {
+    // Si pas de structure HTML, ajouter à la fin
+    trackedContent += trackingPixel;
+  }
 
   try {
     await transporter.sendMail({

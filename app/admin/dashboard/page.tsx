@@ -46,57 +46,57 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Tableau de bord</h1>
+      <h1 className="text-3xl font-bold text-white mb-8">Tableau de bord</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Campagnes</h3>
-          <p className="text-3xl font-bold text-gray-900">{stats._count.id}</p>
+        <div className="bg-slate-950 border border-slate-800 p-6 rounded-lg shadow">
+          <h3 className="text-sm font-medium text-slate-400 mb-2">Campagnes</h3>
+          <p className="text-3xl font-bold text-white">{stats._count.id}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Cibles</h3>
-          <p className="text-3xl font-bold text-gray-900">{totalTargets}</p>
+        <div className="bg-slate-950 border border-slate-800 p-6 rounded-lg shadow">
+          <h3 className="text-sm font-medium text-slate-400 mb-2">Cibles</h3>
+          <p className="text-3xl font-bold text-white">{totalTargets}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Clics</h3>
-          <p className="text-3xl font-bold text-gray-900">{totalClicks}</p>
+        <div className="bg-slate-950 border border-slate-800 p-6 rounded-lg shadow">
+          <h3 className="text-sm font-medium text-slate-400 mb-2">Clics</h3>
+          <p className="text-3xl font-bold text-white">{totalClicks}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Soumissions</h3>
-          <p className="text-3xl font-bold text-gray-900">{totalSubmissions}</p>
+        <div className="bg-slate-950 border border-slate-800 p-6 rounded-lg shadow">
+          <h3 className="text-sm font-medium text-slate-400 mb-2">Soumissions</h3>
+          <p className="text-3xl font-bold text-white">{totalSubmissions}</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Campagnes récentes</h2>
+      <div className="bg-slate-950 border border-slate-800 rounded-lg shadow">
+        <div className="px-6 py-4 border-b border-slate-800">
+          <h2 className="text-xl font-semibold text-white">Campagnes récentes</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-slate-800">
+            <thead className="bg-slate-900">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   Nom
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   Statut
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   Cibles
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   Interactions
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-slate-950 divide-y divide-slate-800">
               {recentCampaigns.map((campaign) => (
-                <tr key={campaign.id}>
+                <tr key={campaign.id} className="hover:bg-slate-900 transition">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                    <div className="text-sm font-medium text-white">
                       {campaign.name}
                     </div>
                   </td>
@@ -104,10 +104,10 @@ export default async function DashboardPage() {
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         campaign.status === 'SENT'
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-green-900/50 text-green-400 border border-green-800'
                           : campaign.status === 'COMPLETED'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-blue-900/50 text-blue-400 border border-blue-800'
+                          : 'bg-slate-800 text-slate-300 border border-slate-700'
                       }`}
                     >
                       {campaign.status === 'SENT'
@@ -117,16 +117,16 @@ export default async function DashboardPage() {
                         : 'Brouillon'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                     {campaign._count.targets}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                     {campaign._count.interactions}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
                       href={`/admin/campaigns/${campaign.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-pink-600 hover:text-pink-500 transition"
                     >
                       Voir
                     </Link>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
       <div className="mt-8">
         <Link
           href="/admin/campaigns/new"
-          className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+          className="inline-block bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-colors"
         >
           Créer une nouvelle campagne
         </Link>

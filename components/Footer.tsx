@@ -15,9 +15,9 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ type: "spring", stiffness: 280, damping: 70, mass: 1 }}
             >
-                <a href="https://prebuiltui.com?utm_source=pixels">
-                    <Image className="size-8 aspect-square" src="/assets/footer-logo.svg" alt="footer logo" width={32} height={32} priority />
-                </a>
+                <Link href="/">
+                    <Image className="size-8 aspect-square" src="/assets/footer-logo.svg" alt="PhishLab logo" width={32} height={32} priority />
+                </Link>
                 {footerData.map((section, index) => (
                     <div key={index}>
                         <p className="text-slate-100 font-semibold">{section.title}</p>
@@ -39,7 +39,7 @@ export default function Footer() {
                 viewport={{ once: true }}
                 transition={{ type: "spring", stiffness: 280, damping: 70, mass: 1 }}
             >
-                <p className="max-w-60">Making every customer feel valued—no matter the size of your audience.</p>
+                <p className="max-w-60">Protégez votre organisation avec des campagnes de sensibilisation au phishing efficaces et éducatives.</p>
                 <div className="flex items-center gap-4 mt-3">
                     <a href="https://dribbble.com/prebuiltui" target="_blank" rel="noreferrer">
                         <DribbbleIcon className="size-5 hover:text-pink-500" />
@@ -54,7 +54,7 @@ export default function Footer() {
                         <YoutubeIcon className="size-6 hover:text-pink-500" />
                     </a>
                 </div>
-                <p className="mt-3 text-center">&copy; {new Date().getFullYear()} <a href="https://prebuiltui.com?utm_source=pixels">PrebuiltUI</a></p>
+                <p className="mt-3 text-center">&copy; {new Date().getFullYear()} <Link href="/">PhishLab</Link></p>
             </motion.div>
         </footer>
     );

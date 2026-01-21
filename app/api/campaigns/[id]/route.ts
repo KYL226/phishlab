@@ -4,14 +4,15 @@ import { requireAuth } from '@/lib/auth-helpers';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth('ADMIN');
+    const { id } = await params;
     
     const campaign = await prisma.campaign.findFirst({
       where: {
-        id: params.id,
+        id,
         createdBy: user.id,
       },
       include: {
@@ -46,15 +47,16 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth('ADMIN');
     const body = await request.json();
+    const { id } = await params;
 
     const campaign = await prisma.campaign.updateMany({
       where: {
-        id: params.id,
+        id,
         createdBy: user.id,
       },
       data: {
@@ -78,14 +80,15 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth('ADMIN');
+    const { id } = await params;
 
     await prisma.campaign.deleteMany({
       where: {
-        id: params.id,
+        id,
         createdBy: user.id,
       },
     });

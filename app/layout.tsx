@@ -19,8 +19,8 @@ export default function RootLayout({ children, }: Readonly<{
             </head>
             <body>
                 <SessionProvider>
-                    <LenisScroll />
-                    {children}
+                <LenisScroll />
+                {children}
                 </SessionProvider>
             </body>
         </html>
