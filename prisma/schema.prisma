@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          UserRole  @default(TARGET)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  campaigns     Campaign[]
+  interactions  Interaction[]
+}
+
+enum UserRole {
+  ADMIN
+  TARGET
+}
+
+model Campaign {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?
+  subject         String        // Sujet de l'email
+  emailContent    String        @db.Text // Contenu HTML de l'email
+  landingPageUrl  String        // URL de la landing page simulée
+  createdBy       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sentAt          DateTime?
+  status          CampaignStatus @default(DRAFT)
+  creator         User          @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  targets         CampaignTarget[]
+  interactions    Interaction[]
+  educationalContent String?    @db.Text // Contenu éducatif après interaction
+
+  @@index([createdBy])
+  @@index([status])
+}
+
+enum CampaignStatus {
+  DRAFT
+  SENT
+  COMPLETED
+}
+
+model CampaignTarget {
+  id              String    @id @default(cuid())
+  campaignId      String
+  email           String
+  name            String?
+  token           String    @unique // Token unique pour le tracking
+  sentAt          DateTime?
+  clickedAt       DateTime?
+  submittedAt     DateTime?
+  openedAt        DateTime?
+  campaign        Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([token])
+  @@unique([campaignId, email])
+}
+
+model Interaction {
+  id              String    @id @default(cuid())
+  campaignId      String
+  userId          String?
+  targetId        String?
+  type            InteractionType
+  data            String?   @db.Text // Données soumises (JSON)
+  ipAddress       String?
+  userAgent       String?
+  timestamp       DateTime  @default(now())
+  campaign        Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([timestamp])
+}
+
+enum InteractionType {
+  EMAIL_OPENED
+  LINK_CLICKED
+  FORM_SUBMITTED
+  PAGE_VIEWED
+}
+
