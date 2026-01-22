@@ -20,6 +20,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   campaigns     Campaign[]
   interactions  Interaction[]
+  templates     EmailTemplate[]
 }
 
 enum UserRole {
@@ -94,5 +95,31 @@ enum InteractionType {
   LINK_CLICKED
   FORM_SUBMITTED
   PAGE_VIEWED
+}
+
+model EmailTemplate {
+  id              String    @id @default(cuid())
+  name            String
+  category        TemplateCategory
+  subject         String
+  emailContent    String    @db.Text
+  landingPageUrl  String
+  educationalContent String  @db.Text
+  isDefault       Boolean   @default(false)
+  createdBy       String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  creator         User?     @relation(fields: [createdBy], references: [id], onDelete: SetNull)
+
+  @@index([category])
+  @@index([createdBy])
+  @@unique([name, createdBy])
+}
+
+enum TemplateCategory {
+  BANCAIRE
+  ENTREPRISE
+  LIVRAISON
+  CUSTOM
 }
 

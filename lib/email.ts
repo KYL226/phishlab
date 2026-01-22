@@ -26,22 +26,33 @@ export async function sendPhishingEmail(
   );
 
   // Ajouter un pixel de tracking invisible pour l'ouverture de l'email
-  // Utiliser plusieurs formats pour maximiser la compatibilité
-  const trackingPixel = `<img src="${openTrackingUrl}" width="1" height="1" style="display:none !important;width:1px !important;height:1px !important;border:0 !important;position:absolute !important;opacity:0 !important;pointer-events:none !important;" alt="" border="0" />`;
+  // Format optimisé pour la compatibilité maximale avec les clients email
+  const trackingPixel = `
+    <img src="${openTrackingUrl}" 
+         width="1" 
+         height="1" 
+         style="display:none;width:1px;height:1px;border:0;position:absolute;opacity:0;pointer-events:none;visibility:hidden;" 
+         alt="" 
+         border="0" 
+         loading="lazy" />
+    <!-- Tracking pixel -->`;
   
-  // Essayer d'insérer dans le body, sinon dans html, sinon à la fin
+  // Essayer d'insérer dans le body de manière plus robuste
+  // Utiliser replace avec flag 'g' pour remplacer toutes les occurrences si nécessaire
   if (trackedContent.includes('</body>')) {
-    // Insérer avant la balise fermante </body>
-    trackedContent = trackedContent.replace('</body>', `${trackingPixel}</body>`);
+    // Insérer juste avant la balise fermante </body> (dernière occurrence)
+    const lastBodyIndex = trackedContent.lastIndexOf('</body>');
+    trackedContent = trackedContent.substring(0, lastBodyIndex) + trackingPixel + trackedContent.substring(lastBodyIndex);
   } else if (trackedContent.includes('</html>')) {
     // Insérer avant la balise fermante </html>
-    trackedContent = trackedContent.replace('</html>', `${trackingPixel}</html>`);
+    const lastHtmlIndex = trackedContent.lastIndexOf('</html>');
+    trackedContent = trackedContent.substring(0, lastHtmlIndex) + trackingPixel + trackedContent.substring(lastHtmlIndex);
   } else if (trackedContent.includes('<body')) {
     // Si body existe mais pas de balise fermante, ajouter juste après <body>
     trackedContent = trackedContent.replace(/<body([^>]*)>/i, `$&${trackingPixel}`);
   } else {
-    // Si pas de structure HTML, ajouter à la fin
-    trackedContent += trackingPixel;
+    // Si pas de structure HTML, ajouter au début et à la fin pour maximiser les chances
+    trackedContent = trackingPixel + trackedContent + trackingPixel;
   }
 
   try {
