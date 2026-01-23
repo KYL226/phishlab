@@ -12,21 +12,33 @@ export async function GET(
       where: { token },
     });
 
-    if (target && !target.openedAt) {
-      await prisma.campaignTarget.update({
-        where: { id: target.id },
-        data: { openedAt: new Date() },
-      });
+    if (target) {
+      // Toujours créer une interaction même si déjà ouvert (pour statistiques)
+      const isFirstOpen = !target.openedAt;
+      
+      if (isFirstOpen) {
+        await prisma.campaignTarget.update({
+          where: { id: target.id },
+          data: { openedAt: new Date() },
+        });
+      }
 
+      // Enregistrer l'interaction d'ouverture
       await prisma.interaction.create({
         data: {
           campaignId: target.campaignId,
           targetId: target.id,
           type: 'EMAIL_OPENED',
-          ipAddress: request.headers.get('x-forwarded-for') || 'unknown',
+          ipAddress: request.headers.get('x-forwarded-for') || 
+                     request.headers.get('x-real-ip') || 
+                     'unknown',
           userAgent: request.headers.get('user-agent') || 'unknown',
         },
       });
+
+      console.log(`Email ouvert tracké - Token: ${token}, Première ouverture: ${isFirstOpen}`);
+    } else {
+      console.warn(`Tentative de tracking avec token invalide: ${token}`);
     }
 
     // Retourner une image transparente de 1x1 pixel pour le tracking

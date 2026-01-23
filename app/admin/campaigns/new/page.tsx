@@ -1,11 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+
+interface Template {
+  id: string;
+  name: string;
+  category: string;
+  subject: string;
+  emailContent: string;
+  landingPageUrl: string;
+  educationalContent: string;
+}
 
 export default function NewCampaignPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -14,6 +28,32 @@ export default function NewCampaignPage() {
     landingPageUrl: '',
     educationalContent: '',
   });
+
+  useEffect(() => {
+    // Charger les templates
+    fetch('/api/templates')
+      .then((res) => res.json())
+      .then((data) => setTemplates(data))
+      .catch(() => {});
+
+    // Vérifier si un template est passé en paramètre
+    const templateParam = searchParams.get('template');
+    if (templateParam) {
+      try {
+        const templateData = JSON.parse(decodeURIComponent(templateParam));
+        setFormData({
+          name: templateData.name || '',
+          description: '',
+          subject: templateData.subject || '',
+          emailContent: templateData.emailContent || '',
+          landingPageUrl: templateData.landingPageUrl || '',
+          educationalContent: templateData.educationalContent || '',
+        });
+      } catch (e) {
+        console.error('Erreur lors du chargement du template:', e);
+      }
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +79,70 @@ export default function NewCampaignPage() {
     }
   };
 
+  const handleTemplateSelect = (template: Template) => {
+    setFormData({
+      name: `Campagne - ${template.name}`,
+      description: '',
+      subject: template.subject,
+      emailContent: template.emailContent,
+      landingPageUrl: template.landingPageUrl,
+      educationalContent: template.educationalContent,
+    });
+    setShowTemplateSelector(false);
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-white mb-8">Nouvelle campagne</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-white">Nouvelle campagne</h1>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={() => setShowTemplateSelector(!showTemplateSelector)}
+            className="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition"
+          >
+            {showTemplateSelector ? 'Masquer' : 'Choisir un template'}
+          </button>
+          <Link
+            href="/admin/templates"
+            className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition"
+          >
+            Gérer les templates
+          </Link>
+        </div>
+      </div>
+
+      {showTemplateSelector && (
+        <div className="bg-slate-950 border border-slate-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Sélectionner un template</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+            {templates.map((template) => (
+              <div
+                key={template.id}
+                className="bg-slate-900 border border-slate-800 rounded-lg p-4 hover:border-pink-600 transition cursor-pointer"
+                onClick={() => handleTemplateSelect(template)}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-semibold text-white">{template.name}</h3>
+                  {template.category === 'BANCAIRE' && (
+                    <span className="text-xs bg-blue-600/20 text-blue-400 px-2 py-1 rounded">Bancaire</span>
+                  )}
+                  {template.category === 'ENTREPRISE' && (
+                    <span className="text-xs bg-green-600/20 text-green-400 px-2 py-1 rounded">Entreprise</span>
+                  )}
+                  {template.category === 'LIVRAISON' && (
+                    <span className="text-xs bg-orange-600/20 text-orange-400 px-2 py-1 rounded">Livraison</span>
+                  )}
+                </div>
+                <p className="text-sm text-slate-400 line-clamp-2">{template.subject}</p>
+              </div>
+            ))}
+          </div>
+          {templates.length === 0 && (
+            <p className="text-slate-400 text-center py-4">Aucun template disponible</p>
+          )}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="bg-slate-950 border border-slate-800 rounded-lg shadow p-6 space-y-6">
         <div>

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth-helpers';
 import AdminNavbar from '@/components/AdminNavbar';
+import DashboardLayout from '@/components/DashboardLayout';
 
 export default async function AdminLayout({
   children,
@@ -16,7 +17,7 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-black">
       <AdminNavbar />
-      <main className="container mx-auto px-4 py-8">{children}</main>
+      <DashboardLayout>{children}</DashboardLayout>
     </div>
   );
 }

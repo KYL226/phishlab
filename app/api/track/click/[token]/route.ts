@@ -19,6 +19,28 @@ export async function GET(
       return NextResponse.redirect(new URL('/error', request.url));
     }
 
+    // Si l'email n'a pas encore été marqué comme ouvert, le marquer maintenant
+    // (certains clients email bloquent les images, donc le clic peut être le premier événement)
+    if (!target.openedAt) {
+      await prisma.campaignTarget.update({
+        where: { id: target.id },
+        data: { openedAt: new Date() },
+      });
+
+      // Enregistrer aussi une interaction d'ouverture
+      await prisma.interaction.create({
+        data: {
+          campaignId: target.campaignId,
+          targetId: target.id,
+          type: 'EMAIL_OPENED',
+          ipAddress: request.headers.get('x-forwarded-for') || 
+                     request.headers.get('x-real-ip') || 
+                     'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+        },
+      });
+    }
+
     // Enregistrer le clic
     await prisma.interaction.create({
       data: {

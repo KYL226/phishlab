@@ -138,12 +138,18 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 flex gap-4">
         <Link
           href="/admin/campaigns/new"
           className="inline-block bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-colors"
         >
           Créer une nouvelle campagne
+        </Link>
+        <Link
+          href="/admin/dashboard/evolution"
+          className="inline-block bg-slate-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-slate-700 transition-colors border border-slate-700"
+        >
+          Voir les graphiques
         </Link>
       </div>
     </div>

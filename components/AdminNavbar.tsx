@@ -42,9 +42,19 @@ export default function AdminNavbar() {
             >
               Nouvelle campagne
             </Link>
+            <Link
+              href="/admin/templates"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition ${
+                pathname?.startsWith('/admin/templates')
+                  ? 'bg-pink-600/20 text-pink-400 border border-pink-800'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-pink-400'
+              }`}
+            >
+              Templates
+            </Link>
           </div>
           <button
-            onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+            onClick={() => signOut({ callbackUrl: '/' })}
             className="px-4 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-pink-400 rounded-md transition"
           >
             Déconnexion
