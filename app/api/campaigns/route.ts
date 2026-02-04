@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth('ADMIN');
+    const userId = (user as { id: string }).id;
     const body = await request.json();
 
     const campaign = await prisma.campaign.create({
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         emailContent: body.emailContent,
         landingPageUrl: body.landingPageUrl,
         educationalContent: body.educationalContent,
-        createdBy: user.id,
+        createdBy: userId,
         status: 'DRAFT',
       },
     });
