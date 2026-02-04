@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, TemplateCategory } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const templates = [
   {
     name: 'Banque - Vérification de compte',
-    category: 'BANCAIRE',
+    category: TemplateCategory.BANCAIRE,
     subject: 'Action requise : Vérifiez votre compte bancaire',
     emailContent: `<!DOCTYPE html>
 <html>
@@ -66,7 +66,7 @@ Vous avez cliqué sur un lien dans un email de phishing simulé. Voici ce que vo
   },
   {
     name: 'Support IT - Suspension de compte',
-    category: 'ENTREPRISE',
+    category: TemplateCategory.ENTREPRISE,
     subject: 'Votre compte sera suspendu dans 24h - Action requise',
     emailContent: `<!DOCTYPE html>
 <html>
@@ -121,7 +121,7 @@ Bien tenté, mais vous avez été piégé par cette simulation ! Voici l'analyse
   },
   {
     name: 'Amazon - Problème de livraison',
-    category: 'LIVRAISON',
+    category: TemplateCategory.LIVRAISON,
     subject: 'Votre colis Amazon ne peut pas être livré',
     emailContent: `<!DOCTYPE html>
 <html>

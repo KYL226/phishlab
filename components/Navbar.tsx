@@ -19,7 +19,7 @@ export default function Navbar() {
                 transition={{ type: "spring", stiffness: 250, damping: 70, mass: 1 }}
             >
                 <Link href="/">
-                    <Image className="h-8.5 w-auto" src="/assets/logo.svg" alt="PhishLab logo" width={130} height={34} priority />
+                    <Image className="h-12 w-auto" src="/assets/logo.png" alt="PhishLab logo" width={130} height={34} priority />
                 </Link>
 
                 <div className="hidden md:flex items-center gap-8 transition duration-500">

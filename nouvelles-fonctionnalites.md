@@ -281,7 +281,7 @@ Ce document liste toutes les fonctionnalités possibles à ajouter pour rendre P
 3. ✅ Planification des campagnes
 4. ✅ Gestion des groupes d'utilisateurs
 5. ✅ Scores et classifications
-6. ✅ Rapports détaillés PDF
+6. ✅ Rapports détaillés PDF  
 
 ### Phase 2 - Importantes (3-4 mois)
 7. ✅ Éditeur d'emails visuel

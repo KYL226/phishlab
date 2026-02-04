@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import HeroSection from '@/sections/HeroSection';
 import FeaturesSection from '@/sections/FeaturesSection';
 import TestimonialSection from '@/sections/TestimonialSection';
-import PricingSection from '@/sections/PricingSection';
+//import PricingSection from '@/sections/PricingSection';
 import CTASection from '@/sections/CTASection';
 
 export default async function HomePage() {
@@ -20,8 +20,8 @@ export default async function HomePage() {
       <Navbar />
       <HeroSection />
       <FeaturesSection />
-      <TestimonialSection />
-      <PricingSection />
+      {/*<TestimonialSection />*/}
+      {/*<PricingSection />*/}
       <CTASection />
       <Footer />
     </>
