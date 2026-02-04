@@ -16,7 +16,7 @@ export default function Footer() {
                 transition={{ type: "spring", stiffness: 280, damping: 70, mass: 1 }}
             >
                 <Link href="/">
-                    <Image className="size-8 aspect-square" src="/assets/footer-logo.svg" alt="PhishLab logo" width={32} height={32} priority />
+                    <Image className="size-12 aspect-square" src="/assets/footer-logo.png" alt="PhishLab logo" width={32} height={32} priority />
                 </Link>
                 {footerData.map((section, index) => (
                     <div key={index}>

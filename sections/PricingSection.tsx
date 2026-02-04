@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 import SectionTitle from "@/components/SectionTitle"
 import { pricingData } from "@/data/pricing";
 import { IPricing } from "@/types";
@@ -39,4 +39,4 @@ export default function PricingSection() {
             </div>
         </div>
     );
-}
+}*/

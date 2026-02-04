@@ -43,7 +43,7 @@ export default function DashboardSidebar() {
 
   return (
     <aside className="fixed left-0 top-16 w-64 bg-slate-950 border-r border-slate-800 h-[calc(100vh-4rem)] overflow-y-auto p-6 z-40">
-      <h2 className="text-xl font-bold text-white mb-6 sticky top-0 bg-slate-950 pb-2">Analytics</h2>
+      <h2 className="text-xl font-bold text-white mb-6">Analytics</h2>
       <nav className="space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
