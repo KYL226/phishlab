@@ -15,7 +15,7 @@ model User {
   email         String    @unique
   password      String
   name          String?
-  role          UserRole  @default(TARGET)
+  role          UserRole  @default(ADMIN)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   campaigns     Campaign[]

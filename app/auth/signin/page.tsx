@@ -90,6 +90,16 @@ export default function SignInPage() {
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
+          <p className="mt-6 text-center text-sm text-slate-400">
+          Pas encore de compte ?{' '}
+          <button
+            type="button"
+            onClick={() => router.push('/auth/signup')}
+            className="text-pink-400 hover:text-pink-300 underline"
+          >
+            S'inscrire
+          </button>
+        </p>
         </form>
       </div>
     </div>
