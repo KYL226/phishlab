@@ -7,7 +7,8 @@ import {
   BarChart3, 
   TrendingUp, 
   Calendar,
-  Activity
+  Activity,
+  Mail
 } from 'lucide-react';
 
 export default function DashboardSidebar() {
@@ -18,6 +19,11 @@ export default function DashboardSidebar() {
       name: 'Vue d\'ensemble',
       href: '/admin/dashboard',
       icon: LayoutDashboard,
+    },
+    {
+      name: 'Campagnes (données soumises)',
+      href: '/admin/campaigns',
+      icon: Mail,
     },
     {
       name: 'Évolution des taux',

@@ -29,11 +29,13 @@ export default function PhishingLandingPage() {
       }),
     });
 
-    // Charger le contenu éducatif
-    fetch(`/api/campaigns/${params.campaignId}`)
-      .then((res) => res.json())
-      .then((data) => setCampaign(data))
-      .catch(() => {});
+    // Charger le contenu éducatif de cette campagne (API publique, vérifie le token)
+    const campaignId = params.campaignId as string;
+    const token = params.token as string;
+    fetch(`/api/phish/content?campaignId=${encodeURIComponent(campaignId)}&token=${encodeURIComponent(token)}`)
+      .then((res) => res.ok ? res.json() : Promise.reject(res))
+      .then((data) => setCampaign({ id: campaignId, landingPageUrl: '', educationalContent: data.educationalContent ?? '' }))
+      .catch(() => setCampaign(null));
   }, [params.campaignId, params.token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +57,8 @@ export default function PhishingLandingPage() {
     }
   };
 
-  if (submitted && campaign) {
+  if (submitted) {
+    const educationalContent = campaign?.educationalContent;
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-4 py-12">
         <div className="max-w-2xl w-full bg-slate-950 border border-slate-800 rounded-lg shadow-xl p-8">
@@ -81,7 +84,9 @@ export default function PhishingLandingPage() {
           </div>
 
           <div className="prose prose-invert max-w-none mb-6 text-slate-300 whitespace-pre-line">
-            {campaign.educationalContent}
+            {educationalContent != null && educationalContent !== ''
+              ? educationalContent
+              : 'Ceci était un test de sensibilisation au phishing. Restez vigilant avec vos identifiants.'}
           </div>
 
           <div className="bg-pink-950/30 border-l-4 border-pink-600 p-4 mb-6 rounded-r">

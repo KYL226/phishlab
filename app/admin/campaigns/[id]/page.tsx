@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface Campaign {
   id: string;
@@ -23,6 +24,7 @@ interface Campaign {
     type: string;
     timestamp: Date;
     data: string | null;
+    targetId: string | null;
   }>;
   _count: {
     targets: number;
@@ -40,6 +42,7 @@ export default function CampaignDetailPage() {
   const [targetsInput, setTargetsInput] = useState('');
   const [showEditForm, setShowEditForm] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [visiblePasswords, setVisiblePasswords] = useState<Set<string>>(new Set());
   const [editData, setEditData] = useState({
     name: '',
     description: '',
@@ -174,6 +177,9 @@ export default function CampaignDetailPage() {
   const clickedCount = campaign.targets.filter((t) => t.clickedAt).length;
   const submittedCount = campaign.targets.filter((t) => t.submittedAt).length;
   const openedCount = campaign.targets.filter((t) => t.openedAt).length;
+
+  const submissions = campaign.interactions.filter((i) => i.type === 'FORM_SUBMITTED');
+  const targetById = Object.fromEntries(campaign.targets.map((t) => [t.id, t]));
 
   return (
     <div>
@@ -398,6 +404,93 @@ export default function CampaignDetailPage() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Données soumises (formulaires phishing) */}
+      <div className="bg-slate-950 border border-slate-800 rounded-lg shadow mt-8">
+        <div className="px-6 py-4 border-b border-slate-800">
+          <h2 className="text-xl font-semibold text-white">Données soumises par campagne</h2>
+          <p className="text-sm text-slate-400 mt-1">
+            Données saisies par les utilisateurs sur la fausse page de connexion (à des fins de sensibilisation uniquement).
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          {submissions.length === 0 ? (
+            <div className="px-6 py-12 text-center text-slate-400">
+              Aucune donnée soumise pour cette campagne.
+            </div>
+          ) : (
+            <table className="min-w-full divide-y divide-slate-800">
+              <thead className="bg-slate-900">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase">Date / Heure</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase">Cible (email envoyé)</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase">Email saisi</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase">Mot de passe saisi</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase">Autres champs</th>
+                </tr>
+              </thead>
+              <tbody className="bg-slate-950 divide-y divide-slate-800">
+                {submissions.map((interaction) => {
+                  let formData: Record<string, string> = {};
+                  try {
+                    formData = interaction.data ? JSON.parse(interaction.data) : {};
+                  } catch {
+                    formData = {};
+                  }
+                  const target = interaction.targetId ? targetById[interaction.targetId] : null;
+                  const { email, password, ...rest } = formData;
+                  return (
+                    <tr key={interaction.id} className="hover:bg-slate-900 transition">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                        {new Date(interaction.timestamp).toLocaleString('fr-FR')}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                        {target?.email ?? '-'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-white font-mono">{email ?? '-'}</td>
+                      <td className="px-6 py-4 text-sm text-pink-400 font-mono">
+                        <span className="inline-flex items-center gap-2">
+                          {password
+                            ? visiblePasswords.has(interaction.id)
+                              ? password
+                              : '••••••••'
+                            : '-'}
+                          {password && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setVisiblePasswords((prev) => {
+                                  const next = new Set(prev);
+                                  if (next.has(interaction.id)) next.delete(interaction.id);
+                                  else next.add(interaction.id);
+                                  return next;
+                                })
+                              }
+                              className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-pink-400 transition"
+                              title={visiblePasswords.has(interaction.id) ? 'Masquer le mot de passe' : 'Voir le mot de passe'}
+                            >
+                              {visiblePasswords.has(interaction.id) ? (
+                                <EyeOff size={16} />
+                              ) : (
+                                <Eye size={16} />
+                              )}
+                            </button>
+                          )}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-400">
+                        {Object.keys(rest).length > 0
+                          ? JSON.stringify(rest)
+                          : '-'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

@@ -44,8 +44,20 @@ export async function POST(request: NextRequest) {
       { message: 'Compte créé avec succès.' },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur inscription:', error);
+
+    // En développement, renvoyer plus de détails pour le debug
+    if (process.env.NODE_ENV === 'development') {
+      return NextResponse.json(
+        {
+          error: 'Erreur serveur (DEV)',
+          message: error?.message,
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Erreur serveur. Veuillez réessayer plus tard.' },
       { status: 500 }
